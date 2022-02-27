@@ -11,7 +11,8 @@ const client = new Discord.Client({
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
-const { clientEmail, privateKey } = keys; // this or client_email and private_key?
+const clientEmail = process.env.CLIENT_EMAIL;
+const privateKey = process.env.PRIVATE_KEY;
 const clientSheet = process.env.SPREADSHEET_ID;
 const prefix = process.env.PREFIX;
 const token = process.env.TOKEN;
