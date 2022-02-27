@@ -97,7 +97,7 @@ client.on('message', (message) => {
           description,
           message.url,
         ];
-        const range = 'TODO: RANGE FOR GOOGLESHEET';
+        const range = 'DYI!A1';
         return googleSheetWrite(finalData, range);
       }
     });
@@ -120,7 +120,7 @@ client.on('message', (message) => {
             `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
             time,
           ];
-          const range = 'TODO: RANGE FOR GOOGLESHEET';
+          const range = 'Asistencia-Ayudantes!A1';
           return googleSheetWrite(finalData, range);
         }
       });
