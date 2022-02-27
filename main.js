@@ -4,7 +4,7 @@ const { google } = require('googleapis');
 const fileSystem = require('fs');
 const Discord = require('discord.js');
 const keys = require('./google-credentials.json');
-
+ 
 const client = new Discord.Client({
   ws: { intents: Discord.Intents.NON_PRIVILEGED },
 });
