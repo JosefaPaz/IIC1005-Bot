@@ -24,10 +24,6 @@ const days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
 const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-function countInstances(string, word) {
-  return string.split(word).length - 1;
-}
-
 async function googleSheetWrite(data, sheetRange) {
   const googleSheetApi = google.sheets({ version: 'v4', auth: client });
   const appendOptions = {
@@ -68,11 +64,9 @@ client.on('message', (message) => {
 
   const data = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = data.shift().toLowerCase();
-  const marks = countInstances(data, '"');
 
   console.log('[LOG] ---- New information ------\n', data);
   console.log('[LOG] ---- New message ------\n', message);
-  console.log('[LOG] ---- number of instances: ', marks);
 
   // casual: content of the DIY + optional file
   if (commandName in ['casual:', 'leyend:', 'pro:']) {
