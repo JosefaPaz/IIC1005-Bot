@@ -6,9 +6,10 @@ module.exports = {
   guildOnly: true,
   execute(message, args) {
     if (!message.member.roles.cache.some((role) => role.name === 'Ayudantes')) return;
-    const amount = parseInt(args[0]) + 1;
+    const amount = parseInt(args[1], 10) + 1;
+    console.log('[LOG] ---- New delete number ------', amount);
 
-    if (isNaN(amount)) {
+    if (Number.isNaN(amount)) {
       return message.reply('Amigazo, eso no es un número');
     } if (amount <= 1 || amount > 100) {
       return message.reply('Debe ser un número entre 1 y 99 (incluidos)');
