@@ -6,7 +6,7 @@ module.exports = {
   guildOnly: true,
   execute(message, args) {
     if (!message.member.roles.cache.some((role) => role.name === 'Ayudantes')) return;
-    const amount = parseInt(args[0], 10) + 1;
+    const amount = parseInt(args[0]) + 1;
 
     if (Number.isNaN(amount)) {
       return message.reply('Amigazo, eso no es un número');
