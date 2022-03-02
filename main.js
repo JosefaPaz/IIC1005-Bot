@@ -23,6 +23,10 @@ const days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
 const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
+function countInstances(string, word) {
+  return string.split(word).length - 1;
+}
+
 async function googleSheetWrite(data, sheetRange) {
   const googleSheetApi = google.sheets({ version: 'v4', auth: googleClient });
   const appendOptions = {
@@ -61,43 +65,54 @@ client.on('guildMemberAdd', (member) => {
 client.on('message', (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  const data = message.content.slice(prefix.length).trim().split(/ +/);
+  const rawData = message.content.slice(prefix.length).trim();
+  const markCount = countInstances(rawData, '"');
   const commandName = message.content.slice(prefix.length).trim().split(/ +/).shift().toLowerCase();
+  let data = message.content.slice(prefix.length).trim().split(/ +/);
 
   console.log('[LOG] ---- New information ------\n', data);
-  console.log('[LOG] ---- Command name ------\n', commandName);
+  console.log('[LOG] ---- Command name ------', commandName);
   console.log('[LOG] ---- New message ------\n', message);
+  console.log('[LOG] ---- Marks ------', markCount);
 
-  // casual: content of the DIY + optional file
-  if (commandName in ['casual:', 'leyend:', 'pro:']) {
-    console.log('[LOG] ---- writing DIY ------');
-    const timestamp = new Date();
-    const time = `${timestamp.getHours().toString()}:${timestamp.getMinutes().toString()}:${timestamp
-      .getSeconds()
-      .toString()}`;
+  // casual "AC" "content of the DIY"
+  if (['casual', 'legend', 'pro'].includes(commandName)) {
+    if (markCount === 4) {
+      console.log('[LOG] ---- writing DIY ------');
+      const timestamp = new Date();
+      const time = `${timestamp.getHours().toString()}:${timestamp.getMinutes().toString()}:${timestamp
+        .getSeconds()
+        .toString()}`;
 
-    const description = data.slice(1).join(' ');
+      data = data.map(x => x.replace(new RegExp('"', 'g'), ''));
+      const experience = data[1];
+      const description = data.slice(2).join(' ');
 
-    googleClient.authorize((err) => {
-      if (err) {
-        console.log('[ERROR] ----', err);
-      } else {
-        const student = message.author.username;
-        const finalData = [
-          [
-          student,
-          days[timestamp.getDay()],
-          `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
-          time,
-          description,
-          message.url
-          ]
-        ];
-        const range = 'DYI!A1';
-        return googleSheetWrite(finalData, range);
-      }
-    });
-    message.reply(`¡Se ha registrado tu DIY nivel ${commandName}, felicitaciones! 😎👩‍💻`);
+      googleClient.authorize((err) => {
+        if (err) {
+          console.log('[ERROR] ----', err);
+        } else {
+          const student = message.author.username;
+          const finalData = [
+            [
+            student,
+            days[timestamp.getDay()],
+            `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
+            time,
+            commandName,
+            experience,
+            description,
+            message.url
+            ]
+          ];
+          const range = 'DYI!A1';
+          return googleSheetWrite(finalData, range);
+        }
+      });
+      message.reply(`¡Se ha registrado tu DIY nivel ${commandName}, felicitaciones! 😎👩‍💻`);
+    } else {
+      message.reply('¡Olvidaste poner algun parámetro o las comillas! ❌');
+    }
   } else if (commandName === 'asistencia-ayudante') {
     if (message.member.roles.cache.some((role) => role.name === 'Ayudantes')) {
       console.log(`[LOG] ---- writing TA assistance for ${message.author} ------`);
