@@ -8,7 +8,7 @@ module.exports = {
     if (!message.member.roles.cache.some((role) => role.name === 'Ayudantes')) return;
     const amount = parseInt(args[0]) + 1;
 
-    if (Number.isNaN(amount)) {
+    if (isNaN(amount)) {
       return message.reply('Amigazo, eso no es un número');
     } if (amount <= 1 || amount > 100) {
       return message.reply('Debe ser un número entre 1 y 99 (incluidos)');
