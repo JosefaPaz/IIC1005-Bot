@@ -92,7 +92,7 @@ client.on('message', (message) => {
         if (err) {
           console.log('[ERROR] ----', err);
         } else {
-          const student = message.author.username;
+          const student = `${message.author.username}#${message.author.discriminator}`;
           const finalData = [
             [
             student,
@@ -127,7 +127,7 @@ client.on('message', (message) => {
         } else {
           const finalData = [
             [
-            message.author.username,
+            `${message.author.username}#${message.author.discriminator}`,
             days[timestamp.getDay()],
             `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
             time
