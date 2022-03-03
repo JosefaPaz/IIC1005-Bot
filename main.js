@@ -105,7 +105,7 @@ client.on('message', (message) => {
             message.url
             ]
           ];
-          const range = 'DYI!A1';
+          const range = 'DIY!A1';
           return googleSheetWrite(finalData, range);
         }
       });
