@@ -19,7 +19,7 @@ const googleClient = new google.auth.JWT(keys.client_email, null, keys.private_k
   'https://www.googleapis.com/auth/spreadsheets',
 ]);
 
-const days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+const days = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
 const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
