@@ -4,7 +4,7 @@ const { google } = require('googleapis');
 const fileSystem = require('fs');
 const Discord = require('discord.js');
 const keys = require('./google-credentials.json');
- 
+
 const client = new Discord.Client({
   ws: { intents: Discord.Intents.NON_PRIVILEGED },
 });
@@ -36,7 +36,7 @@ async function googleSheetWrite(data, sheetRange) {
     resource: { values: data },
   };
 
-  let response = await googleSheetApi.spreadsheets.values.append(appendOptions);
+  const response = await googleSheetApi.spreadsheets.values.append(appendOptions);
   console.log('[LOG] ---- API response ------\n', response);
 }
 
@@ -67,7 +67,8 @@ client.on('message', (message) => {
 
   const rawData = message.content.slice(prefix.length).trim();
   const markCount = countInstances(rawData, '"');
-  const commandName = message.content.slice(prefix.length).trim().split(/ +/).shift().toLowerCase();
+  const commandName = message.content.slice(prefix.length).trim().split(/ +/).shift()
+    .toLowerCase();
   let data = message.content.slice(prefix.length).trim().split(/ +/);
 
   console.log('[LOG] ---- New information ------\n', data);
@@ -84,7 +85,7 @@ client.on('message', (message) => {
         .getSeconds()
         .toString()}`;
 
-      data = data.map(x => x.replace(new RegExp('"', 'g'), ''));
+      data = data.map((x) => x.replace(new RegExp('"', 'g'), ''));
       const experience = data[1];
       const description = data.slice(2).join(' ');
 
@@ -95,15 +96,16 @@ client.on('message', (message) => {
           const student = `${message.author.username}#${message.author.discriminator}`;
           const finalData = [
             [
-            student,
-            days[timestamp.getDay()],
-            `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
-            time,
-            commandName,
-            experience,
-            description,
-            message.url
-            ]
+              `${student}${commandName}`,
+              student,
+              days[timestamp.getDay()],
+              `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
+              time,
+              commandName,
+              experience,
+              description,
+              message.url,
+            ],
           ];
           const range = 'DIY!A1';
           return googleSheetWrite(finalData, range);
@@ -127,11 +129,11 @@ client.on('message', (message) => {
         } else {
           const finalData = [
             [
-            `${message.author.username}#${message.author.discriminator}`,
-            days[timestamp.getDay()],
-            `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
-            time
-            ]
+              `${message.author.username}#${message.author.discriminator}`,
+              days[timestamp.getDay()],
+              `${timestamp.getDate()} ${months[timestamp.getMonth()]}`,
+              time,
+            ],
           ];
           const range = 'Asistencia-Ayudantes!A1';
           return googleSheetWrite(finalData, range);
